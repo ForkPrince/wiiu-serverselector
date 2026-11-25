@@ -1,23 +1,49 @@
-Wii U Server Selector
+# Wii U Server Selector
 
-Lets you swap between different Wii U servers (ex. Pretendo, Protarium) with a menu in the home menu. Make a folder in the root of your SD Card called "wiiu-plugins" and put your .wms and .wps files into a folder inside the "wiiu-plugins" folder, directly into that folder. Still a work in progress, built off of the "evWii" plugin code.
-  
-note: if anything crashes, try deleting any "inkay-pretendo.wms" and "inkay-pretendo.wps" files, or whatever they may be called for you.
+An Aroma plugin that lets you switch between Wii U server environments (for example Pretendo or Protarium) from the plugin config menu.
 
+## Install
 
-HOW TO USE
-1. drop wiiuserverselector.wps into sd:/wiiu/environments/aroma/plugins/
-2. make a folder on the root of your sd card called "wiiu-servers"
-3. pretty much every online server uses a .wps and .wms file. for example, pretendo uses inkay-pretendo.wps and inkay-pretendo.wps. for whatever server you're trying to load, find the .wps and .wms file and make a folder in the "wiiu-servers" folder named your server name and put those files in the folder. your end result should look like SD:/wiiu-servers/[servername]/[filename].wps and SD:/wiiu-servers/[servername]/[filename].wms
+1. Copy `wiiuserverselector.wps` to `sd:/wiiu/environments/aroma/plugins/`.
+2. Create `sd:/wiiu/servers/` on your SD card.
+3. Create one folder inside `sd:/wiiu/servers/` for each server, and put that server's `.wms` and `.wps` files directly inside it.
 
-tip: reboot your wii u to see newly added servers 
+Example layout:
 
-here's an example of what your folder should look like
-<img width="2880" height="1800" alt="Screenshot 2026-09-08 233231" src="https://github.com/user-attachments/assets/ba1cb070-673d-4dce-b3bb-30a17d961fdf" />
+```
+sd:/wiiu/servers/
+├── Pretendo/
+│   ├── inkay-pretendo.wms
+│   └── inkay-pretendo.wps
+└── Protarium/
+    ├── <server>.wms
+    └── <server>.wps
+```
 
-HOW TO COMPILE
-1. download the docker desktop app
-2. run these two lines of code
-"docker build -t evwii_builder ."
-"docker run --rm -v ${PWD}:/project evwii_builder make"
-3. done
+## Usage
+
+Open the plugin config menu and select a server. The plugin copies that server's `.wms` files into the Aroma modules folder and its `.wps` files into the Aroma plugins folder, then reboots the console.
+
+The currently installed server is marked **Current**. Server folders are rescanned every time the menu opens, so you do not need to reboot after adding a new server folder.
+
+## Troubleshooting
+
+If a server file causes crashes, remove the old `.wms`/`.wps` files from these folders and reboot:
+
+- `sd:/wiiu/environments/aroma/modules/`
+- `sd:/wiiu/environments/aroma/plugins/`
+
+## Build
+
+Requires [Docker](https://www.docker.com/).
+
+```sh
+docker build -t wiiu_builder .
+docker run --rm -v "${PWD}:/project" wiiu_builder make
+```
+
+The built plugin is written to `wiiuserverselector.wps` in the repository root.
+
+## Credits
+
+Based on the evWii plugin.
